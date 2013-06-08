@@ -16,10 +16,15 @@ describe("El Nucleo Warp (warp_core)", function() {
     done();
   });
 
+  it("Debe inicializar el objeto warp_core con la Constante de Flujo de Plasma requerida para obterner Warp Uno.", function(done) {
+    expect(warp_core.mgs_per_warp).toBe(300);
+    done();
+  });
+
   it("Debe permitir que se asigne un requerimiento de velocidad warp deseada.", function(done) {
     var new_desired_speed = test_cases.case_7.desired_speed;
 
-    warp_core.set_speed(new_desired_speed, function(error) {
+    warp_core.set_desired_speed(new_desired_speed, function(error) {
       expect(warp_core.desired_speed).toBe(140);
       done();
     });
@@ -54,7 +59,7 @@ describe("El Nucleo Warp (warp_core)", function() {
   });
 
   function set_speed_and_test_flow(desired_speed, expected_flow, done) {
-    warp_core.set_speed(desired_speed, function(error) {
+    warp_core.set_desired_speed(desired_speed, function(error) {
       warp_core.get_required_flow(function(error){
         expect(warp_core.required_flow).toBe(expected_flow);
         done();
