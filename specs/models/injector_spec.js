@@ -1,4 +1,4 @@
-describe("El Inyector", function() {
+describe("El Inyector (injector)", function() {
 
   var injector;
   var sample_cases;
@@ -8,9 +8,10 @@ describe("El Inyector", function() {
     test_cases = require("../../specs/fixtures/sample_case_fixture.js")();
   });
 
-  it("Debe inicializar el objeto en perfecto estado de salud (damage: 0, flow:0).", function(done) {
+  it("Debe inicializar el objeto en perfecto estado de salud (damage: 0, flow: 0, active: true).", function(done) {
     expect(injector.damage).toBe(0);
     expect(injector.flow).toBe(0);
+    expect(injector.active).toBe(true);
     done();
   });
 
@@ -21,7 +22,7 @@ describe("El Inyector", function() {
     done();
   });
 
-  it("Debe poder asignar un daño al inyector, y limitar su valor entre 0 y 100.", function(done) {
+  it("Debe asignar un daño al inyector, y limitar su valor entre 0 y 100.", function(done) {
     injector.set_damage(test_cases.case_4.injectors_damage.B);
     expect(injector.damage).toBe(10);
 
@@ -29,18 +30,22 @@ describe("El Inyector", function() {
     expect(injector.damage).toBe(0);
     injector.set_damage(130);
     expect(injector.damage).toBe(100);
+    injector.set_damage("Invalid input");
+    expect(injector.damage).toBe(0);
 
     done();
   });
 
-  it("Debe poder saber cuanto puede entregar de plasma (available_flow) sin incurrir en desgaste.", function(done) {
+  it("Debe saber cuanto puede entregar de plasma (available_flow) sin incurrir en desgaste y determinar si esta activo (active).", function(done) {
     injector.damage = test_cases.case_4.injectors_damage.A;
     injector.get_available_flow();
     expect(injector.available_flow).toBe(80);
+    expect(injector.active).toBe(true);
 
     injector.damage = test_cases.case_5.injectors_damage.C;
     injector.get_available_flow();
     expect(injector.available_flow).toBe(0);
+    expect(injector.active).toBe(false);
 
     done();
   });
@@ -70,12 +75,12 @@ describe("El Inyector", function() {
     injector.damage = 0;
     delete(injector['available_flow']);
     injector.get_life_expectancy();
-    expect(injector.life_expectancy).toBe(0);
+    expect(injector.life_expectancy).toBe("Unable to comply");
 
     done();
   });
 
-  it("*BONUS* (No solicitado) - Debe reportar el tiempo de vida que le queda para un flujo determinado (utilizando sus especificaciones tecnicas).", function(done) {
+  it("*BONUS* Reportar el tiempo de vida restante utilizando distintas especificaciones tecnicas (por si Scotty mejora los inyectores).", function(done) {
     var life_expectancy_factor = mock_injector_tec_specs();
 
 
@@ -89,7 +94,7 @@ describe("El Inyector", function() {
 
     injector.flow = 160;
     injector.get_life_expectancy();
-    expect(injector.life_expectancy).toBe(0);
+    expect(injector.life_expectancy).toBe("Unable to comply");
 
     done();
   });

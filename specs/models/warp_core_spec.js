@@ -27,6 +27,9 @@ describe("El Nucleo Warp (warp_core)", function() {
     warp_core.set_desired_speed(-20);
     expect(warp_core.desired_speed).toBe(0);
 
+    warp_core.set_desired_speed({a: 'text'});
+    expect(warp_core.desired_speed).toBe(0);
+
     done();
   });
 
