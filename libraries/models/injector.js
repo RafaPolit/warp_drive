@@ -3,7 +3,7 @@ var injector = function(injector){
   function input_to_number(input){
     input = Number(input);
     return (isNaN(input))? 0 : input;
-  }
+  };
 
   return {
     damage: 0,
@@ -22,6 +22,7 @@ var injector = function(injector){
 
     get_available_flow: function(){
       this.available_flow = this.capacity - this.damage;
+      this.active = true;
       if(this.available_flow == 0) this.active = false;
     },
 
@@ -52,7 +53,7 @@ var injector = function(injector){
     delta_flow: function() {
       return (this.flow - this.available_flow);
     }
-  }
-}
+  };
+};
 
 module.exports = injector;

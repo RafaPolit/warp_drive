@@ -50,6 +50,18 @@ describe("El Inyector (injector)", function() {
     done();
   });
 
+  it("Debe reponer el estado activo (active) si se invoca nuevemnte la funcion.", function(done) {
+    injector.damage = test_cases.case_5.injectors_damage.C;
+    injector.get_available_flow();
+    expect(injector.active).toBe(false);
+
+    injector.damage = test_cases.case_8.injectors_damage.C;
+    injector.get_available_flow();
+    expect(injector.active).toBe(true);
+
+    done();
+  });
+
   it("Debe asignar el flujo disponible si se pregunta la vida util sin haber llamado antes a get_available_flow.", function(done){
     injector.get_life_expectancy();
     expect(injector.available_flow).toBe(injector.capacity);
