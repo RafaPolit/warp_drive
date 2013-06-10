@@ -1,8 +1,6 @@
 warp_drive
-==========
-
+======================================================================================
 Prueba de Codigo - Enterprise’ warp-drive management software
-V0.0.1
 
 Instalacion
 -----------
@@ -15,7 +13,7 @@ $ npm test
 Utilizacion
 ======================================================================================
 Hay 2 maneras de usar la aplicacion: desde consola, o desde un explorador de internet
-
+--------------------------------------------------------------------------------------
 Desde Consola:
 --------------------------------------------------------------------------------------
 $ npm run-script enterprise_go
