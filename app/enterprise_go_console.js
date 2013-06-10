@@ -1,10 +1,19 @@
 var enterprise = require("../libraries/models/enterprise.js")();
-var go_data = {
+var go_data_old = {
   desired_speed: Number(process.env.npm_package_config_speed),
   injectors_damage: {
     A: Number(process.env.npm_package_config_Adamage),
     B: Number(process.env.npm_package_config_Bdamage),
     C: Number(process.env.npm_package_config_Cdamage)
+  }
+};
+var go_data_aray = process.env.npm_package_config_data.split(",");
+var go_data = {
+  desired_speed: Number(go_data_aray[0]),
+  injectors_damage: {
+    A: Number(go_data_aray[1]),
+    B: Number(go_data_aray[2]),
+    C: Number(go_data_aray[3])
   }
 };
 

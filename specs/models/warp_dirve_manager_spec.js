@@ -86,6 +86,16 @@ describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
     expect(warp_drive.injectors.C.remaining_flow).toBe(0);
     expect(warp_drive.injectors.C.balanced_flow).toBe(0);
 
+    prepare_calculate_balanced_flow_data('case_9');
+    warp_drive.calculate_balanced_flow();
+    expect(warp_drive.injectors.A.balanced_flow).toBe(3);
+
+    prepare_calculate_balanced_flow_data('case_10');
+    warp_drive.calculate_balanced_flow();
+    expect(warp_drive.injectors.A.balanced_flow).toBe(1);
+    expect(warp_drive.injectors.B.balanced_flow).toBe(1);
+    expect(warp_drive.injectors.C.balanced_flow).toBe(34);
+
     done();
   });
 

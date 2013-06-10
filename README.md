@@ -15,13 +15,19 @@ $ npm test
 Utilizacion
 ======================================================================================
 Hay 2 maneras de usar la aplicacion: desde consola, o desde un explorador de internet
+
 Desde Consola:
+--------------------------------------------------------------------------------------
 $ npm run-script enterprise_go
+
 Para configurar:
-$ npm config set warp_drive:speed 80
-$ npm config set warp_drive:Adamage 20
-$ npm config set warp_drive:Bdamage 40
-$ npm config set warp_drive:Cdamage 60
+
+$ npm config set warp_drive:data 90,20,15,5
+
+(Donde el primer item es la velocidad WARP deseada y los siguientes 3 los daños
+ respectivos de los inyectores A, B y C)
+--------------------------------------------------------------------------------------
+
 
 Notas
 -----

@@ -87,7 +87,7 @@ var warp_drive_manager = function(warp_drive_manager) {
     },
 
     // -----------------------------------------------------
-    assign_active_inactive_injectors: function(injector) {
+    assign_active_inactive_injectors: function() {
       Object.keys(injectors).forEach(function(injector) {
         injectors[injector].set_available_flow();
         if (injectors[injector].active) status.active_injectors.push(injector);
@@ -106,10 +106,41 @@ var warp_drive_manager = function(warp_drive_manager) {
     },
 
     assign_remaining_and_balanced_flow: function(remaining_required_flow) {
+      var all_flows_under_available = true;
+      status.active_injectors.forEach(function(injector){
+        var current_flow_under_available = (injectors[injector].ideal_flow <= injectors[injector].available_flow)
+        all_flows_under_available = all_flows_under_available && current_flow_under_available;
+      });
+
+      if (all_flows_under_available) {
+        status.active_injectors.forEach(function(injector){
+          injectors[injector].balanced_flow = injectors[injector].ideal_flow;
+        });        
+        return;
+      }
+
+      var some_negative_balanced_flow = false;
+      var added_negative_balance = 0;
+      var positive_balanced_injectors = [];
+      var negative_balanced_injectors = [];
       status.active_injectors.forEach(function(injector){
         injectors[injector].remaining_flow = remaining_required_flow / status.num_active_injectors;
         injectors[injector].balanced_flow = injectors[injector].available_flow + injectors[injector].remaining_flow;
+        if (injectors[injector].balanced_flow < 0) {
+          some_negative_balanced_flow = some_negative_balanced_flow || true;
+          added_negative_balance += injectors[injector].available_flow - injectors[injector].balanced_flow;
+          injectors[injector].balanced_flow = injectors[injector].available_flow;
+          negative_balanced_injectors.push(injector);
+        } else {
+          positive_balanced_injectors.push(injector);
+        }
       });
+
+      if (some_negative_balanced_flow) {
+        positive_balanced_injectors.forEach(function(injector) {
+          injectors[injector].balanced_flow -= added_negative_balance / positive_balanced_injectors.length;
+        });
+      }
     },
 
     clear_inactive_injectors_status: function() {
@@ -126,7 +157,7 @@ var warp_drive_manager = function(warp_drive_manager) {
       Object.keys(injectors).forEach(function(injector) {
         best_remaining_life = Math.min(best_remaining_life, injectors[injector].life_beyond_capacity);
       });
-      return(best_remaining_life);
+      return best_remaining_life;
     }
   };
 };

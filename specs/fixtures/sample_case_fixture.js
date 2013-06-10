@@ -73,11 +73,11 @@ module.exports = function() {
 			}
 		},
 		case_10: {
-			desired_speed: 20,
+			desired_speed: 12,
 			injectors_damage: {
-				A:0,
-				B:0,
-				C:99
+				A:99,
+				B:99,
+				C:0
 			}
 		}
 	}

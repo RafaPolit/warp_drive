@@ -6,7 +6,8 @@
     "speed" : "100",
     "Adamage" : "0",
     "Bdamage" : "0",
-    "Cdamage" : "0"
+    "Cdamage" : "0",
+    "data" : "100,0,0,0"
   },
   "repository" : {
     "type" : "git",
