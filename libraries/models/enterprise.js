@@ -7,8 +7,7 @@ var enterprise = function(enterprise) {
     warp_drive.warp_core.set_desired_speed(go_data.desired_speed);
     warp_drive.set_injectors_damage(go_data.injectors_damage);
     warp_drive.evaluate_injectors();
-    warp_drive.calculate_ideal_flow();
-    warp_drive.calculate_balanced_flow();
+    warp_drive.ask_Scotty_the_flows();
     warp_drive.try_warp_go();
   };
 

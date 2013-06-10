@@ -1,11 +1,49 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Enterprise Warp Drive</title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="container">
+      <table class="table">
+        <tr>
+          <th>Caso</th>
+          <th>Daño A (%)</th>
+          <th>Daño B (%)</th>
+          <th>Daño C (%)</th>
+          <th>Warp (%)</th>
+          <th>Resultado de Inyectores</th>
+          <th>Tiempo Funcionamiento</th>
+        </tr>
+<%
+for(i=0;i<8;i++) {
+%>
+        <tr class="<%= results[i].tr_class %>">
+          <td><%= i+1 %></td>
+          <td><%= results[i].data.injectors.A.damage %></td>
+          <td><%= results[i].data.injectors.B.damage %></td>
+          <td><%= results[i].data.injectors.C.damage %></td>
+          <td><%= results[i].data.warp_core.desired_speed %></td>
+          <td><%= results[i].injector_results %></td>
+          <td><%= results[i].remaining_time %></td>
+        </tr>
+<%
+}
+%>
+        <tr>
+          <th colspan="7">Pruebas de otras combinaciones&nbsp;&nbsp;&nbsp;<span class="muted">(caso 12 en sample_case_fixture.js)</span></th>
+        </tr>
+        <tr class="<%= results[11].tr_class %>">
+          <td>#</td>
+          <td><%= results[11].data.injectors.A.damage %></td>
+          <td><%= results[11].data.injectors.B.damage %></td>
+          <td><%= results[11].data.injectors.C.damage %></td>
+          <td><%= results[11].data.warp_core.desired_speed %></td>
+          <td><%= results[11].injector_results %></td>
+          <td><%= results[11].remaining_time %></td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

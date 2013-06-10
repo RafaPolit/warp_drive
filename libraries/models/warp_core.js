@@ -23,8 +23,10 @@ var warp_core = function(warp_core) {
     set_remaining_life: function(remaining_life) {
       this.remaining_life = remaining_life;
       this.remaining_life_string = remaining_life;
-      if (remaining_life >= 0) 
-        this.remaining_life_string = remaining_life + " minuto" + ((remaining_life !== 1)?"s":"");
+      if (remaining_life >= 0) {
+        remaining_life = utils.decimal_to_fixed(remaining_life);
+        this.remaining_life_string =  utils.append_minutes(remaining_life); 
+      }
     }
   };
 };

@@ -6,12 +6,14 @@ var warp_drive_manager = function(warp_drive_manager) {
     B: require('../../libraries/models/injector.js')(),
     C: require('../../libraries/models/injector.js')()
   };
+  var calculator = require('../../libraries/models/flow_calculator.js')();
   var status = {};
 
   return {
     warp_core: warp_core,
     injectors: injectors,
     status: status,
+    calculator: calculator, 
 
     set_injectors_damage: function(injectors_damage) {
       Object.keys(injectors_damage).forEach(function(id) {
@@ -26,17 +28,14 @@ var warp_drive_manager = function(warp_drive_manager) {
       this.assign_active_inactive_injectors();
     },
 
-    calculate_ideal_flow: function(){
+    ask_Scotty_the_flows: function(){
       warp_core.set_required_flow();
-      status.active_injectors.forEach(function(id) {
-        injectors[id].ideal_flow = warp_core.required_flow / status.num_active_injectors;
+      this.prepare_data_for_calculation();
+      calculator.go_Scotty(status.calculator_data);
+      Object.keys(calculator.injectors).forEach(function(id) {
+        injectors[id].balanced_flow = calculator.injectors[id].balanced_flow;
+        injectors[id].status = ''; 
       });
-    },
-
-    calculate_balanced_flow: function() {
-      this.calculate_combined_available_flow();      
-      var remaining_required_flow = warp_core.required_flow - status.combined_available_flow;
-      this.assign_remaining_and_balanced_flow(remaining_required_flow);
       this.clear_inactive_injectors_status();
     },
 
@@ -71,13 +70,16 @@ var warp_drive_manager = function(warp_drive_manager) {
       var injectors_fetched = 0;
       var able_to_comply = false;
 
-      Object.keys(injectors).forEach(function(injector_name) {
+      Object.keys(injectors).forEach(function(id) {
         injectors_fetched += 1;
-        var current_injector = injectors[injector_name];
+        var current_injector = injectors[id];
 
-        if (typeof(current_injector.status) == "undefined" || current_injector.status !== "Unable to comply") {
-          able_to_comply = able_to_comply || true;
-          injectors_reply += injector_name + ": " + current_injector.get_flow_reply();
+        var is_injector_undefined = (typeof(current_injector.status) == "undefined");
+        var is_injector_active = (current_injector.active == true);
+        var is_injector_unable = (current_injector.status !== "Unable to comply");
+        if (is_injector_undefined || is_injector_unable) {
+          able_to_comply = able_to_comply || (true && is_injector_active);
+          injectors_reply += id + ": " + current_injector.get_flow_reply();
           injectors_reply += (injectors_fetched < Object.keys(injectors).length)?", ":"";
         }
       });
@@ -98,49 +100,13 @@ var warp_drive_manager = function(warp_drive_manager) {
       status.all_injectors_inactive = (status.active_injectors.length === 0) ? true : false ;
     },
 
-    calculate_combined_available_flow: function() {
-      status.combined_available_flow = 0;
+    prepare_data_for_calculation:function() {
+      status.calculator_data = {};
+      status.calculator_data.required_combined_flow = warp_core.required_flow;
+      status.calculator_data.available_flows = {};
       status.active_injectors.forEach(function(id){
-        status.combined_available_flow += injectors[id].available_flow;
+        status.calculator_data.available_flows[id] = injectors[id].available_flow;
       });
-    },
-
-    assign_remaining_and_balanced_flow: function(remaining_required_flow) {
-      var all_flows_under_available = true;
-      status.active_injectors.forEach(function(id){
-        var current_flow_under_available = (injectors[id].ideal_flow <= injectors[id].available_flow)
-        all_flows_under_available = all_flows_under_available && current_flow_under_available;
-      });
-
-      if (all_flows_under_available) {
-        status.active_injectors.forEach(function(id){
-          injectors[id].balanced_flow = injectors[id].ideal_flow;
-        });        
-        return;
-      }
-
-      var some_negative_balanced_flow = false;
-      var added_negative_balance = 0;
-      var positive_balanced_injectors = [];
-      var negative_balanced_injectors = [];
-      status.active_injectors.forEach(function(id){
-        injectors[id].remaining_flow = remaining_required_flow / status.num_active_injectors;
-        injectors[id].balanced_flow = injectors[id].available_flow + injectors[id].remaining_flow;
-        if (injectors[id].balanced_flow < 0) {
-          some_negative_balanced_flow = some_negative_balanced_flow || true;
-          added_negative_balance += injectors[id].available_flow - injectors[id].balanced_flow;
-          injectors[id].balanced_flow = injectors[id].available_flow;
-          negative_balanced_injectors.push(id);
-        } else {
-          positive_balanced_injectors.push(id);
-        }
-      });
-
-      if (some_negative_balanced_flow) {
-        positive_balanced_injectors.forEach(function(id) {
-          injectors[id].balanced_flow -= added_negative_balance / positive_balanced_injectors.length;
-        });
-      }
     },
 
     clear_inactive_injectors_status: function() {

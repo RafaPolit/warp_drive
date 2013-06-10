@@ -17,6 +17,12 @@ describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
     done();
   });
 
+  it("Debe tener acceso a la calculadora de Scotty!", function(done ){
+    expect(warp_drive.calculator).toBeDefined();
+    expect(typeof(warp_drive.calculator.go_Scotty)).toBe('function');
+    done();
+  });
+
   it("Debe cambiar las propiedades de cada inyector sin afectar a los otros (verificar instances de Javascript).", function(done){
     warp_drive.injectors.A.set_damage(20);
     expect(warp_drive.injectors.A.damage).toBe(20);
@@ -56,46 +62,24 @@ describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
     done();
   });
 
-  it("Debe calcular los ideales (ideal_flow) por inyector activo de mg/s para la velocidad deseada.", function(done){
-
-    prepare_calculate_ideal_flow_data('case_5');       
-    warp_drive.calculate_ideal_flow();
-    expect(warp_drive.injectors.A.ideal_flow).toBe(120);
-
-    prepare_calculate_ideal_flow_data('case_8');       
-    warp_drive.calculate_ideal_flow();
-    expect(warp_drive.injectors.A.ideal_flow).toBe(170);
-
-    done();
-  });
-
-  it("Debe promediar los ideales entre los inyectores activos (balanced_flow), segun el estado actual de cada inyector.", function(done){
-
-    prepare_calculate_balanced_flow_data('case_4');
-    warp_drive.calculate_balanced_flow();
-    expect(warp_drive.injectors.A.balanced_flow).toBe(90);
-    expect(warp_drive.injectors.B.balanced_flow).toBe(100);
-    expect(warp_drive.injectors.C.balanced_flow).toBe(110);
-
+  it("Debe poder preguntar a Scotty el flujo correcto de plasma", function(done) {
     prepare_calculate_balanced_flow_data('case_5');
-    warp_drive.calculate_balanced_flow();
+    warp_drive.ask_Scotty_the_flows();
     expect(warp_drive.injectors.A.balanced_flow).toBe(120);
-    expect(warp_drive.injectors.B.balanced_flow).toBe(120);
     expect(warp_drive.injectors.C.status).toBe('');
     expect(warp_drive.injectors.C.flow).toBe(0);
-    expect(warp_drive.injectors.C.remaining_flow).toBe(0);
     expect(warp_drive.injectors.C.balanced_flow).toBe(0);
 
-    prepare_calculate_balanced_flow_data('case_9');
-    warp_drive.calculate_balanced_flow();
-    expect(warp_drive.injectors.A.balanced_flow).toBe(3);
+    prepare_calculate_balanced_flow_data('case_8');
+    warp_drive.ask_Scotty_the_flows();
+    expect(warp_drive.injectors.A.balanced_flow).toBeCloseTo(186.7, 1);
 
     prepare_calculate_balanced_flow_data('case_10');
-    warp_drive.calculate_balanced_flow();
+    warp_drive.ask_Scotty_the_flows();
     expect(warp_drive.injectors.A.balanced_flow).toBe(1);
     expect(warp_drive.injectors.B.balanced_flow).toBe(1);
     expect(warp_drive.injectors.C.balanced_flow).toBe(34);
-
+    
     done();
   });
 
@@ -130,6 +114,11 @@ describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
   it("Debe generar la respuesta de los inyectores en un string legible", function(done){
     warp_drive.set_injectors_reply();
     expect(warp_drive.injectors_reply).toBe("A: 0 mg/s, B: 0 mg/s, C: 0 mg/s");
+
+    prepare_try_warp_go('case_11');
+    warp_drive.try_warp_go();
+    warp_drive.set_injectors_reply();
+    expect(warp_drive.injectors_reply).toBe("Unable to comply");
     done();
   });
 
@@ -142,20 +131,15 @@ describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
     warp_drive.set_injectors_damage(injectors_damage);
   }
 
-  function prepare_calculate_ideal_flow_data(test_case){
+  function prepare_calculate_balanced_flow_data(test_case){
     warp_drive.warp_core.set_desired_speed(test_cases[test_case].desired_speed);
     prepare_evaluate_injectors_data(test_case);
     warp_drive.evaluate_injectors();
   }
 
-  function prepare_calculate_balanced_flow_data(test_case){
-    prepare_calculate_ideal_flow_data(test_case);
-    warp_drive.calculate_ideal_flow();
-  }
-
   function prepare_try_warp_go(test_case){
     prepare_calculate_balanced_flow_data(test_case);
-    warp_drive.calculate_balanced_flow();
+    warp_drive.ask_Scotty_the_flows();
   }
 
 });

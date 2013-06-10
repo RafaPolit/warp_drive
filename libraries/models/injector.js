@@ -34,8 +34,7 @@ var injector = function(injector) {
     },
 
     get_flow_reply: function() {
-      var flow_string = ((this.flow % 1) != 0)?this.flow.toFixed(2):this.flow;
-      return flow_string + " mg/s";
+      return utils.decimal_to_fixed(this.flow) + " mg/s";
     },
 
     // -------------------------------------------------------
