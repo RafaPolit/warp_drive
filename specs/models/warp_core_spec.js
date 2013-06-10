@@ -18,7 +18,7 @@ describe("El Nucleo Warp (warp_core)", function() {
     done();
   });
 
-  it("Debe permitir que se asigne un requerimiento de velocidad warp deseada, y ser cero o mayor", function(done) {
+  it("Debe permitir que se asigne un requerimiento de velocidad warp deseada, y ser cero o mayor.", function(done) {
     var new_desired_speed = test_cases.case_7.desired_speed;
 
     warp_core.set_desired_speed(new_desired_speed);
@@ -38,18 +38,34 @@ describe("El Nucleo Warp (warp_core)", function() {
 
     warp_core.desired_speed = test_cases.case_1.desired_speed;
     expected_flow = 300;
-    warp_core.get_required_flow();
+    warp_core.set_required_flow();
     expect(warp_core.required_flow).toBe(expected_flow);
 
     warp_core.desired_speed = test_cases.case_3.desired_speed;
     expected_flow = 90;
-    warp_core.get_required_flow();
+    warp_core.set_required_flow();
     expect(warp_core.required_flow).toBe(expected_flow);
 
     warp_core.desired_speed = test_cases.case_8.desired_speed;
     expected_flow = 510;
-    warp_core.get_required_flow();
+    warp_core.set_required_flow();
     expect(warp_core.required_flow).toBe(expected_flow);
+
+    done();
+  });
+
+  it("Debe permitir asignar un estado (status) y el tiempo de vida que le queda (remaining_life).", function(done){
+    warp_core.set_status('OK!');
+    warp_core.set_remaining_life(80);
+    expect(warp_core.status).toBe('OK!');
+    expect(warp_core.remaining_life).toBe(80);
+    expect(warp_core.remaining_life_string).toBe("80 minutos");
+
+    warp_core.set_remaining_life(1);
+    expect(warp_core.remaining_life_string).toBe("1 minuto");
+
+    warp_core.set_remaining_life("Infinito");
+    expect(warp_core.remaining_life_string).toBe("Infinito");
 
     done();
   });

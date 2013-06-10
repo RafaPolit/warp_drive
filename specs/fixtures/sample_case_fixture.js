@@ -63,6 +63,22 @@ module.exports = function() {
 				B:50,
 				C:40
 			}
+		},
+		case_9: {
+			desired_speed: 3,
+			injectors_damage: {
+				A:30,
+				B:0,
+				C:0
+			}
+		},
+		case_10: {
+			desired_speed: 20,
+			injectors_damage: {
+				A:0,
+				B:0,
+				C:99
+			}
 		}
 	}
 }

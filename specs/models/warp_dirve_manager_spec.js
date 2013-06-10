@@ -1,4 +1,4 @@
-describe("El Manejador del Nucleo Warp (warp_dirve_manager)", function() {
+describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
 
   var warp_drive;
   var sample_cases;
@@ -24,10 +24,10 @@ describe("El Manejador del Nucleo Warp (warp_dirve_manager)", function() {
     done();
   });
 
-  it("Debe asignar en bloque el estado de los 3 inyectores.", function(done){
+  it("Debe poder asignar en bloque el estado de los 3 inyectores.", function(done){
     var injectors_damage = test_cases.case_8.injectors_damage;
 
-    warp_drive.set_injectors_status(injectors_damage);
+    warp_drive.set_injectors_damage(injectors_damage);
     expect(warp_drive.injectors.A.damage).toBe(20);
     expect(warp_drive.injectors.B.damage).toBe(50);
     expect(warp_drive.injectors.C.damage).toBe(40);
@@ -35,72 +35,117 @@ describe("El Manejador del Nucleo Warp (warp_dirve_manager)", function() {
     done();
   });
 
-  it("Debe evaluar el estado de los inyectores, determinar con cuales y cuantos, y registrar los inactivos.", function(done){
+  it("Debe evaluar el estado de los inyectores, determinar con cuales y cuantos cuenta, y registrar los inactivos.", function(done){
     
-    prepare_evaluate_injectors_data(4);
+    prepare_evaluate_injectors_data('case_4');
     warp_drive.evaluate_injectors();
 
     expect(warp_drive.status.active_injectors[2]).toBe('C');
     expect(warp_drive.status.num_active_injectors).toBe(3);
     expect(warp_drive.status.num_inactive_injectors).toBe(0);
 
-    prepare_evaluate_injectors_data(5);
+    prepare_evaluate_injectors_data('case_5');
     warp_drive.evaluate_injectors();
 
     expect(warp_drive.status.active_injectors[2]).toBeUndefined();
     expect(warp_drive.status.num_active_injectors).toBe(2);
     expect(warp_drive.status.num_inactive_injectors).toBe(1);
     expect(warp_drive.status.inactive_injectors[0]).toBe('C');
+    expect(warp_drive.status.all_injectors_inactive).toBe(false);
 
     done();
   });
 
-  it("Debe calcular los ideales (ideal_flow) por inyector activo de mg/s para la velocidad deseada", function(done){
+  it("Debe calcular los ideales (ideal_flow) por inyector activo de mg/s para la velocidad deseada.", function(done){
 
-    prepare_calculate_flow_ideals_data(5);       
-    warp_drive.calculate_flow_ideals();
+    prepare_calculate_ideal_flow_data('case_5');       
+    warp_drive.calculate_ideal_flow();
     expect(warp_drive.injectors.A.ideal_flow).toBe(120);
 
-    prepare_calculate_flow_ideals_data(8);       
-    warp_drive.calculate_flow_ideals();
+    prepare_calculate_ideal_flow_data('case_8');       
+    warp_drive.calculate_ideal_flow();
     expect(warp_drive.injectors.A.ideal_flow).toBe(170);
 
     done();
   });
 
-  it("Debe promediar los ideales entre los inyectores activos (balanced_flow), segun la capacidad de cada reactor", function(done){
+  it("Debe promediar los ideales entre los inyectores activos (balanced_flow), segun el estado actual de cada inyector.", function(done){
 
-    prepare_calculate_balanced_flow_data(4);
+    prepare_calculate_balanced_flow_data('case_4');
     warp_drive.calculate_balanced_flow();
     expect(warp_drive.injectors.A.balanced_flow).toBe(90);
     expect(warp_drive.injectors.B.balanced_flow).toBe(100);
     expect(warp_drive.injectors.C.balanced_flow).toBe(110);
 
-    prepare_calculate_balanced_flow_data(5);
+    prepare_calculate_balanced_flow_data('case_5');
     warp_drive.calculate_balanced_flow();
     expect(warp_drive.injectors.A.balanced_flow).toBe(120);
     expect(warp_drive.injectors.B.balanced_flow).toBe(120);
+    expect(warp_drive.injectors.C.status).toBe('');
+    expect(warp_drive.injectors.C.flow).toBe(0);
+    expect(warp_drive.injectors.C.remaining_flow).toBe(0);
     expect(warp_drive.injectors.C.balanced_flow).toBe(0);
 
     done();
   });
 
+  it("Debe intentar asignar los flujos de los inyectores y poner el estado general del nucleo warp", function(done){
+    
+    prepare_try_warp_go('case_1');
+
+    warp_drive.try_warp_go();
+    expect(warp_drive.injectors.A.flow).toBe(100);
+    expect(warp_drive.injectors.B.flow).toBe(100);
+    expect(warp_drive.injectors.C.flow).toBe(100);
+    expect(warp_drive.warp_core.remaining_life).toBe("Infinito");
+
+    prepare_try_warp_go('case_7');
+
+    warp_drive.try_warp_go();
+    expect(warp_drive.injectors.A.flow).toBe(150);
+    expect(warp_drive.injectors.B.flow).toBe(150);
+    expect(warp_drive.injectors.C.flow).toBe(120);
+    expect(warp_drive.warp_core.status).toBe('OK!');
+    expect(warp_drive.warp_core.remaining_life_string).toBe("50 minutos");
+
+    prepare_try_warp_go('case_8');
+
+    warp_drive.try_warp_go();
+    expect(warp_drive.warp_core.status).toBe('Unable to comply');
+    expect(warp_drive.warp_core.remaining_life).toBe(0);
+
+    done();
+  });
+
+  it("Debe generar la respuesta de los inyectores en un string legible", function(done){
+    warp_drive.set_injectors_reply();
+    expect(warp_drive.injectors_reply).toBe("A: 0 mg/s, B: 0 mg/s, C: 0 mg/s");
+    done();
+  });
+
+  // -----------------------------------------------------------------
+
   function prepare_evaluate_injectors_data(test_case){
     var injectors_damage = {};
 
-    injectors_damage = test_cases['case_' + test_case].injectors_damage;
-    warp_drive.set_injectors_status(injectors_damage);
+    injectors_damage = test_cases[test_case].injectors_damage;
+    warp_drive.set_injectors_damage(injectors_damage);
   }
 
-  function prepare_calculate_flow_ideals_data(test_case){
-    warp_drive.warp_core.set_desired_speed(test_cases['case_' + test_case].desired_speed);
+  function prepare_calculate_ideal_flow_data(test_case){
+    warp_drive.warp_core.set_desired_speed(test_cases[test_case].desired_speed);
     prepare_evaluate_injectors_data(test_case);
     warp_drive.evaluate_injectors();
   }
 
   function prepare_calculate_balanced_flow_data(test_case){
-    prepare_calculate_flow_ideals_data(test_case);
-    warp_drive.calculate_flow_ideals();
+    prepare_calculate_ideal_flow_data(test_case);
+    warp_drive.calculate_ideal_flow();
+  }
+
+  function prepare_try_warp_go(test_case){
+    prepare_calculate_balanced_flow_data(test_case);
+    warp_drive.calculate_balanced_flow();
   }
 
 });

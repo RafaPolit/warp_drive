@@ -22,7 +22,7 @@ describe("El Inyector (injector)", function() {
     done();
   });
 
-  it("Debe asignar un daño al inyector, y limitar su valor entre 0 y 100.", function(done) {
+  it("Debe poder asignar un daño al inyector, y limitar su valor entre 0 y 100.", function(done) {
     injector.set_damage(test_cases.case_4.injectors_damage.B);
     expect(injector.damage).toBe(10);
 
@@ -38,12 +38,12 @@ describe("El Inyector (injector)", function() {
 
   it("Debe saber cuanto puede entregar de plasma (available_flow) sin incurrir en desgaste y determinar si esta activo (active).", function(done) {
     injector.damage = test_cases.case_4.injectors_damage.A;
-    injector.get_available_flow();
+    injector.set_available_flow();
     expect(injector.available_flow).toBe(80);
     expect(injector.active).toBe(true);
 
     injector.damage = test_cases.case_5.injectors_damage.C;
-    injector.get_available_flow();
+    injector.set_available_flow();
     expect(injector.available_flow).toBe(0);
     expect(injector.active).toBe(false);
 
@@ -52,43 +52,47 @@ describe("El Inyector (injector)", function() {
 
   it("Debe reponer el estado activo (active) si se invoca nuevemnte la funcion.", function(done) {
     injector.damage = test_cases.case_5.injectors_damage.C;
-    injector.get_available_flow();
+    injector.set_available_flow();
     expect(injector.active).toBe(false);
 
     injector.damage = test_cases.case_8.injectors_damage.C;
-    injector.get_available_flow();
+    injector.set_available_flow();
     expect(injector.active).toBe(true);
 
     done();
   });
 
-  it("Debe asignar el flujo disponible si se pregunta la vida util sin haber llamado antes a get_available_flow.", function(done){
-    injector.get_life_expectancy();
+  it("Debe asignar el flujo disponible si se pregunta la vida util sin haber llamado antes a set_available_flow.", function(done){
+    injector.set_life_expectancy();
     expect(injector.available_flow).toBe(injector.capacity);
     done();
   });
 
-  it("Debe reportar el tiempo de vida que le queda para un flujo determinado.", function(done){
-    injector.flow = 100;
-    injector.get_life_expectancy();
-    expect(injector.life_expectancy).toBe('infinite');
+  it("Debe intentar asignar un flujo, determinar si es factible y reportar el tiempo de vida restante.", function(done){
+    injector.attempt_flow(100);
+    expect(injector.flow).toBe(100);
+    expect(injector.life_expectancy).toBe('Infinite');
+    expect(injector.status).toBe('OK!');
 
-    injector.flow = 110;
-    injector.get_life_expectancy();
+    injector.attempt_flow(110);
+    expect(injector.flow).toBe(110);
     expect(injector.life_expectancy).toBe(90);
+    expect(injector.status).toBe('OK!');
 
-    injector.flow = 160;
     injector.damage = 50;
-    delete(injector['available_flow']);
-    injector.get_life_expectancy();
-    expect(injector.life_expectancy).toBe("Unable to comply");
+    injector.attempt_flow(150);
+    expect(injector.flow).toBe(0);
+    expect(injector.life_expectancy).toBe(0);
+    expect(injector.status).toBe('Unable to comply');
 
-    injector.flow = 200;
-    injector.damage = 0;
-    delete(injector['available_flow']);
-    injector.get_life_expectancy();
-    expect(injector.life_expectancy).toBe("Unable to comply");
+    done();
+  });
 
+  it("Regresar una respuesta legible de su flujode plasma.", function(done) {
+    expect(injector.get_flow_reply()).toBe('0 mg/s');
+
+    injector.attempt_flow(166.666666666);
+    expect(injector.get_flow_reply()).toBe('166.67 mg/s');
     done();
   });
 
@@ -97,16 +101,16 @@ describe("El Inyector (injector)", function() {
 
 
     injector.flow = 71;
-    injector.get_life_expectancy();
+    injector.set_life_expectancy();
     expect(injector.life_expectancy).toBeCloseTo(120 - life_expectancy_factor, 3);
 
     injector.flow = 70;
-    injector.get_life_expectancy();
-    expect(injector.life_expectancy).toBe('infinite');
+    injector.set_life_expectancy();
+    expect(injector.life_expectancy).toBe('Infinite');
 
     injector.flow = 160;
-    injector.get_life_expectancy();
-    expect(injector.life_expectancy).toBe("Unable to comply");
+    injector.set_life_expectancy();
+    expect(injector.life_expectancy).toBe(0);
 
     done();
   });

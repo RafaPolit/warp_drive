@@ -1,9 +1,6 @@
-var injector = function(injector){
+var injector = function(injector) {
 
-  function input_to_number(input){
-    input = Number(input);
-    return (isNaN(input))? 0 : input;
-  };
+  var utils = require('../../libraries/utils/general_utils.js')();
 
   return {
     damage: 0,
@@ -13,44 +10,54 @@ var injector = function(injector){
     life_beyond_capacity: 100,
     max_flow_beyond_capacity: 100,
 
-    set_damage: function(damage){
-      damage = input_to_number(damage);
-      damage = Math.max(damage, 0);
-      damage = Math.min(damage, 100);
+    set_damage: function(damage) {
+      damage = utils.input_to_number(damage);
+      damage = Math.min(Math.max(damage, 0), 100);
       this.damage = damage;
     },
 
-    get_available_flow: function(){
+    set_available_flow: function() {
       this.available_flow = this.capacity - this.damage;
-      this.active = true;
-      if(this.available_flow == 0) this.active = false;
+      this.active = (this.available_flow > 0) ? true : false;
     },
 
-    get_life_expectancy: function(){
-      if (typeof(this.available_flow) === 'undefined'){
-        this.get_available_flow();
-      }
-      this.life_expectancy = (this.max_flow_beyond_capacity - this.delta_flow()) * this.life_expectancy_coeficient();
-
-      this.validate_life_expectancy();
+    attempt_flow: function(flow) {
+      this.flow = flow;
+      this.status = 'OK!';
+      this.set_life_expectancy();
     },
 
-    validate_life_expectancy: function(){
-      if (this.life_expectancy >= this.life_beyond_capacity){
-        this.life_expectancy = 'infinite';
+    set_life_expectancy: function() {
+      this.set_available_flow();
+      this.life_expectancy = (this.max_flow_beyond_capacity - this.flow_above_capacity()) * this.life_expectancy_coeficient();
+      this.validate_injector();
+    },
+
+    get_flow_reply: function() {
+      var flow_string = ((this.flow % 1) != 0)?this.flow.toFixed(2):this.flow;
+      return flow_string + " mg/s";
+    },
+
+    // -------------------------------------------------------
+
+    validate_injector: function() {
+      if (this.life_expectancy >= this.life_beyond_capacity) {
+        this.life_expectancy = 'Infinite';
         return;
       }
-      if((this.available_flow + this.max_flow_beyond_capacity) <= this.flow){
-        this.life_expectancy = 'Unable to comply';
+      if((this.available_flow + this.max_flow_beyond_capacity) <= this.flow) {
+        this.flow = 0;
+        this.life_expectancy = 0;
+        this.status = 'Unable to comply'
         return;
       }
     },
 
-    life_expectancy_coeficient: function(){
+    life_expectancy_coeficient: function() {
       return (this.life_beyond_capacity/this.max_flow_beyond_capacity);
     },
 
-    delta_flow: function() {
+    flow_above_capacity: function() {
       return (this.flow - this.available_flow);
     }
   };
