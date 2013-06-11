@@ -48,7 +48,10 @@ Notas
 ======================================================================================
 * La aplicacion esta diseñada para poder responder a cualquier combinacion solicitada
 * La aplicacion genera un objecto enterprise que contiene tres funciones:
-  - go_mr_Sulu 
+  La principal es ** go_mr_Sulu **
+  Las otras sirven para obtener los resultados en formato string.
+* Algunos test realmente son tests de integración, que deberían haber sido remplazados
+  por mocks individuales.
 * La aplicacion resuelve correctamente los casos 'limite', por ejmplo si se selecciona
   velocidad 0 y daños en los inyectores y otras situaciones litsadas en casos a probar.
 * Las dos funciones que reciben input de usuario tienen validacion para evitar numeros
