@@ -8,7 +8,7 @@ describe("El USS Enterprise (enterprise)", function() {
     test_cases = require("../../specs/fixtures/sample_case_fixture.js")();
   });
 
-  it ("Debe inicializarse con un puente de comando (bridge), el Nucleo Warp y sus Inyectores, y el software warp_drive_manager.", function(done){
+  it ("Debe inicializarse con un Puente de Comando (bridge), el Nucleo Warp, sus Inyectores, y el software warp_drive_manager.", function(done){
     expect(enterprise.bridge).toBeDefined();
     expect(enterprise.warp_core).toBeDefined();
     expect(enterprise.warp_drive).toBeDefined();

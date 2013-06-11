@@ -1,11 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>Enterprise Warp Drive</title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="container">
+      <div class="row">&nbsp;</div>
+      <div class="row">
+        <div class="span12">
+          <table class="table">
+            <tr>
+              <th>#</th>
+              <th>Daño A (%)</th>
+              <th>Daño B (%)</th>
+              <th>Daño C (%)</th>
+              <th>Warp (%)</th>
+              <th>Resultado de Inyectores</th>
+              <th>Tiempo Funcionamiento</th>
+            </tr>
+    <%
+    for(i=0;i<8;i++) {
+    %>
+            <tr class="<%= results[i].tr_class %>">
+              <td><%= i+1 %></td>
+              <td><%= results[i].data.injectors.A.damage %></td>
+              <td><%= results[i].data.injectors.B.damage %></td>
+              <td><%= results[i].data.injectors.C.damage %></td>
+              <td><%= results[i].data.warp_core.desired_speed %></td>
+              <td><%= results[i].injector_results %></td>
+              <td><%= results[i].remaining_time %></td>
+            </tr>
+    <%
+    }
+    %>
+          </table>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

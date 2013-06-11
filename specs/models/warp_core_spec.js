@@ -56,10 +56,10 @@ describe("El Nucleo Warp (warp_core)", function() {
 
   it("Debe permitir asignar un estado (status) y el tiempo de vida que le queda (remaining_life).", function(done){
     warp_core.set_status('OK!');
-    warp_core.set_remaining_life(80);
+    warp_core.set_remaining_life(80.336);
     expect(warp_core.status).toBe('OK!');
-    expect(warp_core.remaining_life).toBe(80);
-    expect(warp_core.remaining_life_string).toBe("80 minutos");
+    expect(warp_core.remaining_life).toBe(80.336);
+    expect(warp_core.remaining_life_string).toBe("80.34 minutos");
 
     warp_core.set_remaining_life(1);
     expect(warp_core.remaining_life_string).toBe("1 minuto");

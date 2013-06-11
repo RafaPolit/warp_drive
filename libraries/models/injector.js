@@ -34,22 +34,27 @@ var injector = function(injector) {
     },
 
     get_flow_reply: function() {
-      var flow_string = ((this.flow % 1) != 0)?this.flow.toFixed(2):this.flow;
-      return flow_string + " mg/s";
+      return utils.decimal_to_fixed(this.flow) + " mg/s";
     },
 
     // -------------------------------------------------------
 
     validate_injector: function() {
+      this.check_expectancy_infinite();
+      this.check_unable_to_comply();
+    },
+
+    check_expectancy_infinite: function() {
       if (this.life_expectancy >= this.life_beyond_capacity) {
         this.life_expectancy = 'Infinite';
-        return;
       }
+    },
+
+    check_unable_to_comply: function() {
       if((this.available_flow + this.max_flow_beyond_capacity) <= this.flow) {
         this.flow = 0;
         this.life_expectancy = 0;
         this.status = 'Unable to comply'
-        return;
       }
     },
 

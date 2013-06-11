@@ -2,13 +2,7 @@
   "name": "warp_drive",
   "version": "0.9.1",
   "private": true,
-  "config": {
-    "speed" : "100",
-    "Adamage" : "0",
-    "Bdamage" : "0",
-    "Cdamage" : "0",
-    "data" : "100,0,0,0"
-  },
+  "config": { "data" : "100,0,0,0" },
   "repository" : {
     "type" : "git",
     "url" : "https://github.com/RafaPolit/warp_drive.git"
