@@ -34,8 +34,7 @@ $ npm config set warp_drive:data 90,20,15,5
 
 (Donde el primer item es la velocidad WARP deseada y los siguientes 3 los daños
  respectivos de los inyectores A, B y C)
---------------------------------------------------------------------------------------
-
+ 
 ======================================================================================
 Estructura
 ======================================================================================
