@@ -1,7 +1,6 @@
 var express = require('express')
   , routes = require('./routes')
   , routes_form = require('./routes/index_form.js')()
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path');
 
