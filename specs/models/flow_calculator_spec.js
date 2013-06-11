@@ -1,4 +1,4 @@
-describe("La Calculadora de Flujo", function(){
+describe("La Calculadora de Flujo (flow_calculator)", function(){
 
   var calculator;
 
@@ -6,13 +6,23 @@ describe("La Calculadora de Flujo", function(){
     calculator = require("../../libraries/models/flow_calculator.js")();
     test_cases = require("../../specs/fixtures/calculator_case_fixture.js")();
     calculator.load_injector_data(test_cases.case_1);
+    spyOn(calculator, 'clean_injector_data').andCallThrough();
   });
 
-  it("Debe cargar los datos requeridos para realizar los calculos.", function(done) {
+  it("Debe cargar los datos requeridos para realizar los calculos y limpiar datos antiguos.", function(done) {
     calculator.load_injector_data(test_cases.case_1);
+    expect(calculator.clean_injector_data).toHaveBeenCalled();
     expect(calculator.data.required_combined_flow).toBe(9);
     expect(calculator.injectors.A.available_flow).toBe(1);
     expect(calculator.injectors.C.available_flow).toBe(100);
+    done();
+  });
+
+  it("Debe limpiar la informacion anterior en caso de existir", function(done) {
+    calculator.injectors.A = {};
+    calculator.clean_injector_data();
+    expect(calculator.injectors.A).toBeUndefined();
+
     done();
   });
 

@@ -46,8 +46,8 @@ module.exports = function() {
 		},
 		// used for trying different scenarios, not used in tests
 		case_12: {
-			desired_speed: 12,
-			injectors_damage: { A:0, B:99, C:0 }
+			desired_speed: 60,
+			injectors_damage: { A:20, B:40, C:20 }
 		}
 		// ------------------------------------------------------
 	}

@@ -40,15 +40,21 @@ var injector = function(injector) {
     // -------------------------------------------------------
 
     validate_injector: function() {
+      this.check_expectancy_infinite();
+      this.check_unable_to_comply();
+    },
+
+    check_expectancy_infinite: function() {
       if (this.life_expectancy >= this.life_beyond_capacity) {
         this.life_expectancy = 'Infinite';
-        return;
       }
+    },
+
+    check_unable_to_comply: function() {
       if((this.available_flow + this.max_flow_beyond_capacity) <= this.flow) {
         this.flow = 0;
         this.life_expectancy = 0;
         this.status = 'Unable to comply'
-        return;
       }
     },
 

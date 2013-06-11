@@ -1,8 +1,10 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+p {
+  margin: 0px;
+  padding: 0px;
 }
-
-a {
-  color: #00B7FF;
+.margin_top_sm {
+  margin-top: 10px;
+}
+table.table tr td {
+  vertical-align: middle;
 }

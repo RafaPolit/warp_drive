@@ -24,6 +24,5 @@ exports.index = function(req, res){
       tr_class: tr_class
     });
   }
-
   res.render('index', { "results": results });
 };

@@ -9,6 +9,7 @@ describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
   });
 
   it("Debe inicializar el manejador con un nucleo, tres inyectores y el estatus de la Enterprise vacio.", function(done){
+    expect(warp_drive.utils).toBeDefined();
     expect(warp_drive.warp_core.mgs_per_warp).toBe(300);
     expect(warp_drive.injectors.A.damage).toBe(0);
     expect(warp_drive.injectors.B.flow).toBe(0);
@@ -112,6 +113,7 @@ describe("El Manejador del Nucleo Warp (warp_drive_manager)", function() {
   });
 
   it("Debe generar la respuesta de los inyectores en un string legible", function(done){
+    warp_drive.evaluate_injectors();
     warp_drive.set_injectors_reply();
     expect(warp_drive.injectors_reply).toBe("A: 0 mg/s, B: 0 mg/s, C: 0 mg/s");
 

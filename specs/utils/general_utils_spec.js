@@ -29,5 +29,11 @@ describe("Utilidades Generales (general_utils)", function() {
     done();
   });
 
+  it("Debe concatenar una arreglo en una cadena con un elemento delimitador.", function(done) {
+    expect(utils.concat_string(["A", "b", "C"], ", ")).toBe('A, b, C');
+    expect(utils.concat_string([], ", ")).toBe('');
+    done();
+  });
+
 
 });

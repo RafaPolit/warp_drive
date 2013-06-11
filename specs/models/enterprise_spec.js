@@ -8,7 +8,7 @@ describe("El USS Enterprise (enterprise)", function() {
     test_cases = require("../../specs/fixtures/sample_case_fixture.js")();
   });
 
-  it ("Debe inicializarse con un puente de comando (bridge), el Nucleo Warp y sus Inyectores, y el software warp_drive_manager.", function(done){
+  it ("Debe inicializarse con un Puente de Comando (bridge), el Nucleo Warp, sus Inyectores, y el software warp_drive_manager.", function(done){
     expect(enterprise.bridge).toBeDefined();
     expect(enterprise.warp_core).toBeDefined();
     expect(enterprise.warp_drive).toBeDefined();
@@ -21,32 +21,30 @@ describe("El USS Enterprise (enterprise)", function() {
 
   it("Kirk debe poder dar la ordern GO! y la formula de Scotty debe poner el flujo correcto en los inyectores, si es posible.", function(done){
     
-    // enterprise.bridge.go_mr_Sulu(test_cases.case_1);
-    // check_test_results_to_be(100, 100, 100, 'Infinito');
+    enterprise.bridge.go_mr_Sulu(test_cases.case_1);
+    check_test_results_to_be(100, 100, 100, 'Infinito');
 
-    // enterprise.bridge.go_mr_Sulu(test_cases.case_2);
-    // check_test_results_to_be(90, 90, 90, 'Infinito');
+    enterprise.bridge.go_mr_Sulu(test_cases.case_2);
+    check_test_results_to_be(90, 90, 90, 'Infinito');
 
-    // enterprise.bridge.go_mr_Sulu(test_cases.case_3);
-    // check_test_results_to_be(30, 30, 30, 'Infinito');
+    enterprise.bridge.go_mr_Sulu(test_cases.case_3);
+    check_test_results_to_be(30, 30, 30, 'Infinito');
 
     enterprise.bridge.go_mr_Sulu(test_cases.case_4);
-    console.log(enterprise.injectors);
     check_test_results_to_be(90, 100, 110, '90 minutos');
 
     enterprise.bridge.go_mr_Sulu(test_cases.case_5);
-    console.log(enterprise.injectors);
     check_test_results_to_be(120, 120, 0, '80 minutos');
 
-    // enterprise.bridge.go_mr_Sulu(test_cases.case_6);
-    // check_test_results_to_be(150, 150, 150, '50 minutos');
+    enterprise.bridge.go_mr_Sulu(test_cases.case_6);
+    check_test_results_to_be(150, 150, 150, '50 minutos');
 
-    // enterprise.bridge.go_mr_Sulu(test_cases.case_7);
-    // check_test_results_to_be(150, 150, 120, '50 minutos');
+    enterprise.bridge.go_mr_Sulu(test_cases.case_7);
+    check_test_results_to_be(150, 150, 120, '50 minutos');
 
-    // enterprise.bridge.go_mr_Sulu(test_cases.case_8);
-    // expect(enterprise.warp_core.remaining_life_string).toBe("0 minutos");
-    // expect(enterprise.warp_core.status).toBe('Unable to comply');
+    enterprise.bridge.go_mr_Sulu(test_cases.case_8);
+    expect(enterprise.warp_core.remaining_life_string).toBe("0 minutos");
+    expect(enterprise.warp_core.status).toBe('Unable to comply');
 
     done();
   });

@@ -1,10 +1,6 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express')
   , routes = require('./routes')
+  , routes_form = require('./routes/index_form.js')()
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path');
@@ -19,6 +15,8 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(express.session({secret: 'warp_drive'}));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -28,7 +26,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/go', routes_form.form);
+app.post('/go', routes_form.form_post);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

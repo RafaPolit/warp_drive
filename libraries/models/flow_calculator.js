@@ -7,7 +7,20 @@ var flow_calculator = function(flow_calculator) {
     injectors: injectors,
     data: data,
 
+    go_Scotty: function(received_data) {
+      this.load_injector_data(received_data);
+      this.get_ideal_flow();
+      this.get_unfulfilled_flow();
+      this.get_balanced_flows();
+      this.set_flows_for_negative_values();
+      this.redistribute_negative_flows();
+      this.assign_all_ideal_if_possible();
+    },
+    
+    // -------------------------------------
+
     load_injector_data: function(received_data) {
+      this.clean_injector_data();
       data.required_combined_flow = received_data.required_combined_flow;
       Object.keys(received_data.available_flows).forEach(function(id) {
         injectors[id] = {};
@@ -43,11 +56,15 @@ var flow_calculator = function(flow_calculator) {
         if(injectors[id].balanced_flow < 0) {
           data.negative_flowed_injectors.push(id);
           data.redistributable_flow += injectors[id].balanced_flow - injectors[id].available_flow;
-          injectors[id].balanced_flow = injectors[id].available_flow;     
+          injectors[id].balanced_flow = injectors[id].available_flow;   
         } else {
           data.positive_flowed_injectors.push(id);
         }
       });
+    },
+
+    distinguish_possitive_from_negative_flow: function(id) {
+
     },
 
     redistribute_negative_flows: function() {
@@ -69,14 +86,10 @@ var flow_calculator = function(flow_calculator) {
       }
     },
 
-    go_Scotty: function(received_data) {
-      this.load_injector_data(received_data);
-      this.get_ideal_flow();
-      this.get_unfulfilled_flow();
-      this.get_balanced_flows();
-      this.set_flows_for_negative_values();
-      this.redistribute_negative_flows();
-      this.assign_all_ideal_if_possible();
+    clean_injector_data: function() {
+      Object.keys(injectors).forEach(function(id) {
+        delete(injectors[id]);
+      });
     }
   }
 }

@@ -88,7 +88,7 @@ describe("El Inyector (injector)", function() {
     done();
   });
 
-  it("Regresar una respuesta legible de su flujode plasma.", function(done) {
+  it("Debe regresar una respuesta legible de su flujo de plasma.", function(done) {
     expect(injector.get_flow_reply()).toBe('0 mg/s');
 
     injector.attempt_flow(166.666666666);
