@@ -37,49 +37,42 @@
             </tr>
           </table>
           <form class="form-inline" method="POST">
-          <table class="table">
-            <tr>
-              <td>&nbsp;</td>
-              <td>
-                <div class="input-prepend input-append">
-                  <span class="add-on">A:</span>
-                  <input class="input-mini" id="damage_a" name="damage_a" type="text" value="<%= results[11].data.injectors.A.damage %>">
-                  <span class="add-on">%</span>
-                </div>
-              </td>
-              <td>
-                <div class="input-prepend input-append">
-                  <span class="add-on">B:</span>
-                  <input class="input-mini" id="damage_b" name="damage_b" type="text" value="<%= results[11].data.injectors.B.damage %>">
-                  <span class="add-on">%</span>
-                </div>
-              </td>
-              <td>
-                <div class="input-prepend input-append">
-                  <span class="add-on">B:</span>
-                  <input class="input-mini" id="damage_c" name="damage_c" type="text" value="<%= results[11].data.injectors.C.damage %>">
-                  <span class="add-on">%</span>
-                </div>
-              </td>
-              <td>
-                <div class="input-prepend input-append">
-                  <span class="add-on">Warp:</span>
-                  <input class="input-mini" id="speed" name="speed" type="text" value="<%= results[11].data.warp_core.desired_speed %>">
-                  <span class="add-on">%</span>
-                </div>
-              </td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-              <td colspan="4">
-                <button class="btn btn-large btn-block btn-primary" type="submit">Go Mr. Sulu!</button>
-              </td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-          </table>
+          <div class="row">
+            <div class="span2 offset1 text-center">
+              <div class="input-prepend input-append">
+                <span class="add-on">A:</span>
+                <input class="input-mini" id="damage_a" name="damage_a" type="text" value="<%= results[11].data.injectors.A.damage %>">
+                <span class="add-on">%</span>
+              </div>
+            </div>
+            <div class="span2 text-center">
+              <div class="input-prepend input-append">
+                <span class="add-on">B:</span>
+                <input class="input-mini" id="damage_b" name="damage_b" type="text" value="<%= results[11].data.injectors.B.damage %>">
+                <span class="add-on">%</span>
+              </div>
+            </div>
+            <div class="span2 text-center">
+              <div class="input-prepend input-append">
+                <span class="add-on">B:</span>
+                <input class="input-mini" id="damage_c" name="damage_c" type="text" value="<%= results[11].data.injectors.C.damage %>">
+                <span class="add-on">%</span>
+              </div>
+            </div>
+            <div class="span3 text-center">
+              <div class="input-prepend input-append">
+                <span class="add-on">Warp:</span>
+                <input class="input-mini" id="speed" name="speed" type="text" value="<%= results[11].data.warp_core.desired_speed %>">
+                <span class="add-on">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">&nbsp;</div>
+          <div class="row">
+            <div class="span9 offset1 text-center">
+              <button class="btn btn-large btn-block btn-primary" type="submit">Go Mr. Sulu!</button>
+            </div>
+          </div>
         </form>
         </div>
       </div>
