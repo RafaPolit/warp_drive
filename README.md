@@ -38,7 +38,7 @@ $ npm config set warp_drive:data 90,20,15,5
 ======================================================================================
 Estructura
 ======================================================================================
-* Todos los modelos de la aplicacion se encuentran en /libraries/models
+* Todos los modelos de la aplicación se encuentran en /libraries/models
 * Cada uno de ellos viene acompañado de un test en /specs/models
 * Un script con utilidades menores se encuentra en /libraries/utils
 * Este script tiene su test respectivo en /specs/utils
@@ -58,6 +58,13 @@ Notas
   fuera de rango o texto en lugar de numeros, etc.
 * La aplicacion esta diseñada para que puedan cambiarse las especificaciones de flujo
   por warp, rendimiento de los inyectores, etc.
+* Tanto las rutas js, las vistas ejs y la aplicación de consola están hechas más bien
+  al apuro y sin tests o 'refactors' más alla de verificar que funcionen y son más bien 
+  para mostrar los datos y servir de input que como referencia de código, así que por
+  favor no les tengan en cuenta como emjemplo de código.
+* Usé Bootsrap como CSS para la vista rápida de las dos páginas WEB, pero no hay nada
+  de funcionalidad JS sacada de librerías en ninguna parte del código más allá del 
+  aspecto de los ejs.
 
 Casos 'Limite' a probar para verificar
 ---------------------------------------------------------------------------------------
