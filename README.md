@@ -70,6 +70,6 @@ Notas
 Casos 'Limite' a probar para verificar
 ---------------------------------------------------------------------------------------
 Seria interesante probar algunos casos 'especiales', para ver los algoritmos matematicos.
-* A:20%, B:0%, C:0%, W:3% -> Determinados algoritmos arrojaran el flujo de A en negativo!.
+* A:20%, B:0%, C:0%, W:3% -> Determinados algoritmos arrojarán el flujo de A en negativo!.
 * A:0%, B:90%, C:0%, W:0% -> Cualquier combinacion de velocidad 0 con daño en los inyectores.
 * A:90%, B:40%, C:40%, W:50% -> Determinados algoritmos no optimizaran el tiempo restante.
