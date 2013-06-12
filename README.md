@@ -12,12 +12,12 @@ $ npm test
 
 Utilizacion
 ======================================================================================
-Hay 2 maneras de usar la aplicacion: desde un explorador de internet o desde consola 
+Hay 2 maneras de usar la aplicación: desde un explorador de internet o desde consola 
 
 --------------------------------------------------------------------------------------
 Desde un Navegador de Internet (Chrome recomendado):
 --------------------------------------------------------------------------------------
-Ejecutar
+Ejecutar desde consola en el directorio del proyecto (luego de npm install) 
 $ npm start
 
 * http://localhost:3000       - en el navegador para ver resultados de casos ejemplo
