@@ -47,7 +47,7 @@ Estructura
 Notas
 ======================================================================================
 * La aplicacion esta diseñada para poder responder a cualquier combinacion solicitada
-* La aplicacion genera un objecto enterprise que contiene tres funciones:
+* La aplicacion genera un objeto enterprise que contiene tres funciones:
   La principal es ** go_mr_Sulu **
   Las otras sirven para obtener los resultados en formato string.
 * Algunos test realmente son tests de integración, que deberían haber sido remplazados
