@@ -20,9 +20,7 @@
               <th>Resultado de Inyectores</th>
               <th>Tiempo Funcionamiento</th>
             </tr>
-    <%
-    for(i=0;i<8;i++) {
-    %>
+    <% for(i=0;i<8;i++) { %>
             <tr class="<%= results[i].tr_class %>">
               <td><%= i+1 %></td>
               <td><%= results[i].data.injectors.A.damage %></td>
@@ -32,9 +30,7 @@
               <td><%= results[i].injector_results %></td>
               <td><%= results[i].remaining_time %></td>
             </tr>
-    <%
-    }
-    %>
+    <% } %>
           </table>
         </div>
       </div>
